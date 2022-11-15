@@ -43,54 +43,6 @@ describe('Testing the product controller', function () {
       expect(res.json).to.have.been.calledWith(productList[0]);
     });
 
-    it('should return an error if id is string', async function () {
-      const res = {};
-      const req = { params: { id: 'a' } };
-
-      res.status = sinon.stub().returns(res);
-      res.json = sinon.stub().returns();
-      sinon.stub(productsServices, 'getById').resolves({
-        isBoom: true,
-        output: {
-          statusCode: 400,
-          payload: {
-            message: '"value" must be a number',
-          },
-        },
-      });
-
-      await productsControllers.getById(req, res);
-
-      expect(res.status).to.have.been.calledWith(400);
-      expect(res.json).to.have.been.calledWith({
-        message: '"value" must be a number',
-      });
-    });
-
-    it('should return an error if id is negative', async function () {
-      const res = {};
-      const req = { params: { id: -1 } };
-
-      res.status = sinon.stub().returns(res);
-      res.json = sinon.stub().returns();
-      sinon.stub(productsServices, 'getById').resolves({
-        isBoom: true,
-        output: {
-          statusCode: 400,
-          payload: {
-            message: '"value" must be greater than or equal to 1',
-          },
-        },
-      });
-
-      await productsControllers.getById(req, res);
-
-      expect(res.status).to.have.been.calledWith(400);
-      expect(res.json).to.have.been.calledWith({
-        message: '"value" must be greater than or equal to 1',
-      });
-    });
-
     it('should return an error if id is not found', async function () {
       const res = {};
       const req = { params: { id: 1 } };
@@ -98,13 +50,9 @@ describe('Testing the product controller', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
       sinon.stub(productsServices, 'getById').resolves({
-        isBoom: true,
-        output: {
-          statusCode: 404,
-          payload: {
-            message: 'Product not found',
-          },
-        },
+        isError: true,
+        statusCode: 404,
+        message: 'Product not found',
       });
 
       await productsControllers.getById(req, res);
