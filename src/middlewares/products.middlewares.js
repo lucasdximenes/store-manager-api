@@ -2,9 +2,10 @@ const { validadeId } = require('./validations');
 
 const validateId = async (req, res, next) => {
   const { id } = req.params;
-  const error = validadeId(id);
-  if (error) {
-    return res.status(400).json({ message: error.message });
+  const isError = validadeId(id);
+  if (isError) {
+    const { statusCode, message } = isError;
+    return res.status(statusCode).json({ message });
   }
   return next();
 };

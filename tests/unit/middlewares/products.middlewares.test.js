@@ -17,7 +17,7 @@ describe('Test validateId middeware', function () {
 
     await productsMiddlewares.validateId(req, res);
 
-    expect(res.status).to.have.been.calledWith(400);
+    expect(res.status).to.have.been.calledWith(422);
     expect(res.json).to.have.been.calledWith({
       message: '"value" must be a number',
     });
@@ -32,7 +32,7 @@ describe('Test validateId middeware', function () {
 
     await productsMiddlewares.validateId(req, res);
 
-    expect(res.status).to.have.been.calledWith(400);
+    expect(res.status).to.have.been.calledWith(422);
     expect(res.json).to.have.been.calledWith({
       message: '"value" must be greater than or equal to 1',
     });
