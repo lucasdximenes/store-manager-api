@@ -8,12 +8,8 @@ const getAll = async (_req, res) => {
 const getById = async (req, res) => {
   const { id } = req.params;
   const payload = await productsServices.getById(id);
-  console.log(payload);
-  if (payload.isBoom) {
-    const {
-      statusCode,
-      payload: { message },
-    } = payload.output;
+  if (payload.isError) {
+    const { statusCode, message } = payload;
     return res.status(statusCode).json({ message });
   }
   return res.status(200).json(payload);
