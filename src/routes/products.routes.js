@@ -9,4 +9,6 @@ router.get('/', productsControllers.getAll);
 
 router.get('/:id', productsMiddlewares.validateId, productsControllers.getById);
 
+router.post('/', productsMiddlewares.validateInsertProductBody, productsControllers.create);
+
 module.exports = router;
