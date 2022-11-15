@@ -26,4 +26,12 @@ describe('Testing the product model', function () {
       expect(result).to.be.deep.equal(productList[0]);
     });
   });
+
+  describe('when insert method is called', function () {
+    it('returns the id of the inserted product', async function () {
+      sinon.stub(connection, 'execute').resolves([{ insertId: 1 }]);
+      const result = await productsModel.insert('Product 1');
+      expect(result).to.be.deep.equal(1);
+    });
+  });
 });

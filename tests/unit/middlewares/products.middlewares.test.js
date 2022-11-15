@@ -8,43 +8,104 @@ chai.use(sinonChai);
 const { productsMiddlewares } = require('../../../src/middlewares');
 
 describe('Test validateId middeware', function () {
-  it('should return an error if id is string', async function () {
-    const res = {};
-    const req = { params: { id: 'test' } };
+  afterEach(sinon.restore);
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+  describe('when validateId is called', function () {
+    it('should return an error if id is string', async function () {
+      const res = {};
+      const req = { params: { id: 'test' } };
 
-    await productsMiddlewares.validateId(req, res);
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
 
-    expect(res.status).to.have.been.calledWith(422);
-    expect(res.json).to.have.been.calledWith({
-      message: '"value" must be a number',
+      await productsMiddlewares.validateId(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({
+        message: '"value" must be a number',
+      });
+    });
+
+    it('should return an error if id is negative', async function () {
+      const res = {};
+      const req = { params: { id: -1 } };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsMiddlewares.validateId(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({
+        message: '"value" must be greater than or equal to 1',
+      });
+    });
+
+    it('should call next if id is number', async function () {
+      const res = {};
+      const req = { params: { id: 1 } };
+      const next = sinon.stub().returns();
+
+      await productsMiddlewares.validateId(req, res, next);
+
+      expect(next).to.have.been.called;
     });
   });
 
-  it('should return an error if id is negative', async function () {
-    const res = {};
-    const req = { params: { id: -1 } };
+  describe('when validateInsertProductBody is called', function () {
+    it("Should return an error if name isn't provided", async function () {
+      const res = {};
+      const req = { body: {} };
 
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns();
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
 
-    await productsMiddlewares.validateId(req, res);
+      await productsMiddlewares.validateInsertProductBody(req, res);
 
-    expect(res.status).to.have.been.calledWith(422);
-    expect(res.json).to.have.been.calledWith({
-      message: '"value" must be greater than or equal to 1',
+      expect(res.status).to.have.been.calledWith(400);
+      expect(res.json).to.have.been.calledWith({
+        message: '"name" is required',
+      });
     });
-  });
 
-  it('should call next if id is number', async function () {
-    const res = {};
-    const req = { params: { id: 1 } };
-    const next = sinon.stub().returns();
+    it("Should return an error if name isn't a string", async function () {
+      const res = {};
+      const req = { body: { name: 1 } };
 
-    await productsMiddlewares.validateId(req, res, next);
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
 
-    expect(next).to.have.been.called;
+      await productsMiddlewares.validateInsertProductBody(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({
+        message: '"name" should be a type of "text"',
+      });
+    });
+
+    it('Should return an error if name length is less than 5', async function () {
+      const res = {};
+      const req = { body: { name: 'test' } };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsMiddlewares.validateInsertProductBody(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({
+        message: '"name" length must be at least 5 characters long',
+      });
+    });
+
+    it('Should call next if name is valid', async function () {
+      const res = {};
+      const req = { body: { name: 'test test' } };
+      const next = sinon.stub().returns();
+
+      await productsMiddlewares.validateInsertProductBody(req, res, next);
+
+      expect(next).to.have.been.called;
+    });
   });
 });

@@ -63,4 +63,26 @@ describe('Testing the product controller', function () {
       });
     });
   });
+
+  describe('when create method is called', function () {
+    it('Should return a new product if it is created successfully', async function () {
+      const res = {};
+      const req = { body: { name: 'Product 1' } };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsServices, 'insert').resolves({
+        id: 1,
+        name: 'Product 1',
+      });
+
+      await productsControllers.create(req, res);
+
+      expect(res.status).to.have.been.calledWith(201);
+      expect(res.json).to.have.been.calledWith({
+        id: 1,
+        name: 'Product 1',
+      });
+    });
+  });
 });

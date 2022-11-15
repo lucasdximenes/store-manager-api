@@ -35,4 +35,13 @@ describe('Testing the product service', function () {
       expect(result).to.have.nested.property('message', 'Product not found');
     });
   });
+
+  describe('whe insert method is called', function () {
+    it('should successfully if id is valid', async function () {
+      sinon.stub(productsModel, 'insert').resolves(1);
+      sinon.stub(productsModel, 'getById').resolves([productList[0]]);
+      const result = await productsServices.insert('Product 1');
+      expect(result).to.be.deep.equal(productList[0]);
+    });
+  });
 });
