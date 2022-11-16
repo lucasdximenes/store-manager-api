@@ -15,6 +15,16 @@ const serviceReturn = {
   ],
 };
 
+const updateServiceReturn = {
+  saleId: 1,
+  itemsUpdated: [
+    {
+      productId: 1,
+      quantity: 1,
+    },
+  ],
+};
+
 const getAllReturn = [
   {
     saleId: 1,
@@ -33,5 +43,6 @@ const getAllReturn = [
 module.exports = {
   sales,
   serviceReturn,
+  updateServiceReturn,
   getAllReturn,
 };

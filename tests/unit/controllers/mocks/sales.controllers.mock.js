@@ -38,10 +38,29 @@ const saleNotFoundError = {
   message: 'Sale not found',
 };
 
+const updateServiceReturn = {
+  saleId: 1,
+  itemsUpdated: [
+    {
+      productId: 1,
+      quantity: 1,
+    },
+  ],
+};
+
+const updateBodyRequest = [
+  {
+    productId: 1,
+    quantity: 1,
+  },
+];
+
 module.exports = {
   correctServiceReturn,
   bodyRequest,
   serviceProductNotFoundError,
   getAllReturn,
   saleNotFoundError,
+  updateServiceReturn,
+  updateBodyRequest,
 };

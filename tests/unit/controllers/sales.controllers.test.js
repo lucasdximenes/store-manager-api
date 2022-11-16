@@ -13,6 +13,8 @@ const {
   serviceProductNotFoundError,
   getAllReturn,
   saleNotFoundError,
+  updateServiceReturn,
+  updateBodyRequest,
 } = require('./mocks/sales.controllers.mock');
 
 describe('Testing the sales controller', function () {
@@ -98,6 +100,44 @@ describe('Testing the sales controller', function () {
       sinon.stub(salesServices, 'getById').resolves(saleNotFoundError);
 
       await salesControllers.getById(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({
+        message: 'Sale not found',
+      });
+    });
+  });
+
+  describe('When update method is called', function () {
+    it('should return an object with the updated sale', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+        body: updateBodyRequest,
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(salesServices, 'update').resolves(updateServiceReturn);
+
+      await salesControllers.update(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(updateServiceReturn);
+    });
+
+    it('should return an error if the service returns an error', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+        body: updateBodyRequest,
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(salesServices, 'update').resolves(saleNotFoundError);
+
+      await salesControllers.update(req, res);
 
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({

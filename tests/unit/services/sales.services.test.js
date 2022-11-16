@@ -5,7 +5,12 @@ chai.use(sinonChai);
 
 const { salesServices } = require('../../../src/services');
 const { salesModel, salesProductsModel, productsModel } = require('../../../src/models');
-const { sales, serviceReturn, getAllReturn } = require('./mocks/sales.services.mock');
+const {
+  sales,
+  serviceReturn,
+  getAllReturn,
+  updateServiceReturn,
+} = require('./mocks/sales.services.mock');
 
 const { expect } = chai;
 
@@ -61,6 +66,35 @@ describe('Testing the sales services', function () {
       expect(result).to.have.property('isError', true);
       expect(result).to.have.nested.property('statusCode', 404);
       expect(result).to.have.nested.property('message', 'Sale not found');
+    });
+  });
+
+  describe('When update method is called', function () {
+    it('returns an object with the updated sale', async function () {
+      sinon.stub(salesModel, 'existSale').resolves([{ id: 1 }]);
+      sinon.stub(productsModel, 'getById').resolves([{ id: 1, name: 'Product 1' }]);
+      sinon.stub(salesProductsModel, 'remove').resolves();
+      sinon.stub(salesProductsModel, 'insert').resolves();
+
+      const result = await salesServices.update(1, sales);
+      expect(result).to.be.deep.equal(updateServiceReturn);
+    });
+
+    it('returns an error if sale not found', async function () {
+      sinon.stub(salesModel, 'existSale').resolves([]);
+      const result = await salesServices.update(1, sales);
+      expect(result).to.have.property('isError', true);
+      expect(result).to.have.nested.property('statusCode', 404);
+      expect(result).to.have.nested.property('message', 'Sale not found');
+    });
+
+    it('returns an error if some product is not found', async function () {
+      sinon.stub(salesModel, 'existSale').resolves([{ id: 1 }]);
+      sinon.stub(productsModel, 'getById').resolves([]);
+      const result = await salesServices.update(1, sales);
+      expect(result).to.have.property('isError', true);
+      expect(result).to.have.nested.property('statusCode', 404);
+      expect(result).to.have.nested.property('message', 'Product not found');
     });
   });
 
