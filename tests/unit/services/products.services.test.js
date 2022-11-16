@@ -77,4 +77,12 @@ describe('Testing the product service', function () {
       expect(result).to.have.nested.property('message', 'Product not found');
     });
   });
+
+  describe('whe searchByQuery method is called', function () {
+    it('Returns a list of products', async function () {
+      sinon.stub(productsModel, 'searchByQuery').resolves([productList[0]]);
+      const result = await productsServices.searchByQuery('Martelo');
+      expect(result).to.be.deep.equal([productList[0]]);
+    });
+  });
 });

@@ -165,4 +165,20 @@ describe('Testing the product controller', function () {
       });
     });
   });
+
+  describe('when searchByQuery method is called', function () {
+    it('Should return a list of products if search is successful', async function () {
+      const res = {};
+      const req = { query: { q: 'Martelo' } };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsServices, 'searchByQuery').resolves([productList[0]]);
+
+      await productsControllers.searchByQuery(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith([productList[0]]);
+    });
+  });
 });

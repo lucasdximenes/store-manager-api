@@ -50,4 +50,12 @@ describe('Testing the product model', function () {
       expect(result).to.be.deep.equal(true);
     });
   });
+
+  describe('When searchByQuery method is called', function () {
+    it('returns a list of products', async function () {
+      sinon.stub(connection, 'execute').resolves([[productList[0]]]);
+      const result = await productsModel.searchByQuery('Martelo');
+      expect(result).to.be.deep.equal([productList[0]]);
+    });
+  });
 });
