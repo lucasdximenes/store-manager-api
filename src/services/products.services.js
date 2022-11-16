@@ -23,8 +23,22 @@ const insert = async (name) => {
   return product;
 };
 
+const update = async (id, name) => {
+  const updated = await productsModel.update(id, name);
+  if (!updated) {
+    return {
+      isError: true,
+      statusCode: 404,
+      message: 'Product not found',
+    };
+  }
+  const [product] = await productsModel.getById(id);
+  return product;
+};
+
 module.exports = {
   getAll,
   getById,
   insert,
+  update,
 };
