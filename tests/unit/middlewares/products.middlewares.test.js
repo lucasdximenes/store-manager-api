@@ -7,7 +7,7 @@ chai.use(sinonChai);
 
 const { productsMiddlewares } = require('../../../src/middlewares');
 
-describe('Test validateId middeware', function () {
+describe('Test products middeware', function () {
   afterEach(sinon.restore);
 
   describe('when validateId is called', function () {

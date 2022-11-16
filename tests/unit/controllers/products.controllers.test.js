@@ -127,4 +127,42 @@ describe('Testing the product controller', function () {
       });
     });
   });
+
+  describe('when exclude method is called', function () {
+    it('Should return only status code 204 if product is excluded successfully', async function () {
+      const res = {};
+      const req = { params: { id: 1 } };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsServices, 'remove').resolves({
+        isError: false,
+      });
+
+      await productsControllers.exclude(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+      expect(res.json).to.have.been.calledWith();
+    });
+
+    it('Should return an error if product is not found', async function () {
+      const res = {};
+      const req = { params: { id: 1 } };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsServices, 'remove').resolves({
+        isError: true,
+        statusCode: 404,
+        message: 'Product not found',
+      });
+
+      await productsControllers.exclude(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({
+        message: 'Product not found',
+      });
+    });
+  });
 });

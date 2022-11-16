@@ -42,4 +42,12 @@ describe('Testing the product model', function () {
       expect(result).to.be.deep.equal(true);
     });
   });
+
+  describe('when remove method is called', function () {
+    it('returns if have affectedRows', async function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+      const result = await productsModel.remove(1);
+      expect(result).to.be.deep.equal(true);
+    });
+  });
 });

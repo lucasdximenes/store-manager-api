@@ -7,7 +7,7 @@ chai.use(sinonChai);
 
 const { salesMiddlewares } = require('../../../src/middlewares');
 
-describe('Test validateInsertSaleBody middleware', function () {
+describe('Test sales middleware', function () {
   afterEach(sinon.restore);
 
   describe('when validateInsertSaleBody is called', function () {
