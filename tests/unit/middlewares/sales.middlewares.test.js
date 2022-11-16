@@ -134,4 +134,47 @@ describe('Test validateInsertSaleBody middleware', function () {
       expect(next).to.have.been.called;
     });
   });
+
+  describe('When validateId is called', function () {
+    it('Should return an error if id is not a number', async function () {
+      const res = {};
+      const req = { params: { id: 'test' } };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesMiddlewares.validateId(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({
+        message: '"id" must be a number',
+      });
+    });
+
+    it('Should return an error if id is negative', async function () {
+      const res = {};
+      const req = { params: { id: -1 } };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await salesMiddlewares.validateId(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({
+        message: '"id" must be greater than or equal to 1',
+      });
+    });
+
+    it('Should call next if id is valid', async function () {
+      const res = {};
+      const req = { params: { id: 1 } };
+
+      const next = sinon.stub();
+
+      await salesMiddlewares.validateId(req, res, next);
+
+      expect(next).to.have.been.called;
+    });
+  });
 });

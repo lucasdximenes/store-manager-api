@@ -5,7 +5,7 @@ chai.use(sinonChai);
 
 const { salesServices } = require('../../../src/services');
 const { salesModel, salesProductsModel, productsModel } = require('../../../src/models');
-const { sales, serviceReturn } = require('./mocks/sales.services.mock');
+const { sales, serviceReturn, getAllReturn } = require('./mocks/sales.services.mock');
 
 const { expect } = chai;
 
@@ -37,6 +37,30 @@ describe('Testing the sales services', function () {
       expect(result).to.have.property('isError', true);
       expect(result).to.have.nested.property('statusCode', 500);
       expect(result).to.have.nested.property('message', 'Error inserting sale');
+    });
+  });
+
+  describe('When getAll method is called', function () {
+    it('returns an array with all sales', async function () {
+      sinon.stub(salesModel, 'getAll').resolves(getAllReturn);
+      const result = await salesServices.getAll();
+      expect(result).to.be.deep.equal(getAllReturn);
+    });
+  });
+
+  describe('When getById method is called', function () {
+    it('returns an array with the sale if found', async function () {
+      sinon.stub(salesModel, 'getById').resolves([getAllReturn[0]]);
+      const result = await salesServices.getById(1);
+      expect(result).to.be.deep.equal([getAllReturn[0]]);
+    });
+
+    it('returns an error if not found', async function () {
+      sinon.stub(salesModel, 'getById').resolves([]);
+      const result = await salesServices.getById(1);
+      expect(result).to.have.property('isError', true);
+      expect(result).to.have.nested.property('statusCode', 404);
+      expect(result).to.have.nested.property('message', 'Sale not found');
     });
   });
 });
