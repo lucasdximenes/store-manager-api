@@ -18,4 +18,6 @@ router.put(
   productsControllers.update,
 );
 
+router.delete('/:id', productsMiddlewares.validateId, productsControllers.exclude);
+
 module.exports = router;
