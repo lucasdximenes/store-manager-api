@@ -1,4 +1,4 @@
-const { validateSales } = require('./validations');
+const { validateSales, validadeId } = require('./validations');
 
 const validateIfAllKeysArePresent = (products) => {
   for (let i = 0; i < products.length; i += 1) {
@@ -46,6 +46,19 @@ const validateInsertSaleBody = async (req, res, next) => {
   return next();
 };
 
+const validateId = async (req, res, next) => {
+  const { id } = req.params;
+
+  const isError = validadeId(id);
+  if (isError) {
+    const { statusCode, message } = isError;
+    return res.status(statusCode).json({ message });
+  }
+
+  return next();
+};
+
 module.exports = {
   validateInsertSaleBody,
+  validateId,
 };

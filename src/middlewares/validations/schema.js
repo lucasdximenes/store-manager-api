@@ -1,6 +1,13 @@
 const Joi = require('joi');
 
-const idSchema = Joi.number().integer().min(1).required();
+// prettier-ignore
+const idSchema = Joi.number().integer().min(1).required()
+.messages({
+  'number.base': '"id" must be a number',
+  'number.integer': '"id" must be an integer',
+  'number.min': '"id" must be greater than or equal to 1',
+  'any.required': '"id" is required',
+});
 
 const productNameSchema = Joi.string().min(5).required().messages({
   'string.base': '"name" should be a type of "text"',
