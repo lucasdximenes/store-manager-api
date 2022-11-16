@@ -11,6 +11,13 @@ router.get('/:id', salesMiddlewares.validateId, salesControllers.getById);
 
 router.post('/', salesMiddlewares.validateInsertSaleBody, salesControllers.create);
 
+router.put(
+  '/:id',
+  salesMiddlewares.validateId,
+  salesMiddlewares.validateInsertSaleBody,
+  salesControllers.update,
+);
+
 router.delete('/:id', salesMiddlewares.validateId, salesControllers.exclude);
 
 module.exports = router;

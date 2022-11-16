@@ -25,6 +25,17 @@ const getById = async (req, res) => {
   return res.status(200).json(payload);
 };
 
+const update = async (req, res) => {
+  const { id } = req.params;
+  const sale = req.body;
+  const payload = await salesServices.update(id, sale);
+  if (payload.isError) {
+    const { statusCode, message } = payload;
+    return res.status(statusCode).json({ message });
+  }
+  return res.status(200).json(payload);
+};
+
 const exclude = async (req, res) => {
   const { id } = req.params;
   const payload = await salesServices.remove(id);
@@ -40,4 +51,5 @@ module.exports = {
   getAll,
   getById,
   exclude,
+  update,
 };
