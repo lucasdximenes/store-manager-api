@@ -75,8 +75,26 @@ const getById = async (id) => {
   return sale;
 };
 
+const remove = async (id) => {
+  const sale = await salesModel.existSale(id);
+  if (!sale.length) {
+    return {
+      isError: true,
+      statusCode: 404,
+      message: 'Sale not found',
+    };
+  }
+  await salesModel.remove(id);
+  await salesProductsModel.remove(id);
+
+  return {
+    isError: false,
+  };
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  remove,
 };

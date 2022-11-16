@@ -9,6 +9,11 @@ const insert = async (saleId, productId, quantity) => {
   return affectedRows === 1;
 };
 
+const remove = async (id) => {
+  await connection.execute('DELETE FROM StoreManager.sales_products WHERE sale_id = ?', [id]);
+};
+
 module.exports = {
   insert,
+  remove,
 };
