@@ -42,10 +42,17 @@ const exclude = async (req, res) => {
   return res.status(204).json();
 };
 
+const searchByQuery = async (req, res) => {
+  const { q } = req.query;
+  const payload = await productsServices.searchByQuery(q);
+  return res.status(200).json(payload);
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   exclude,
+  searchByQuery,
 };

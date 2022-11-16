@@ -50,10 +50,16 @@ const remove = async (id) => {
   };
 };
 
+const searchByQuery = async (query) => {
+  const products = await productsModel.searchByQuery(query);
+  return products;
+};
+
 module.exports = {
   getAll,
   getById,
   insert,
   update,
   remove,
+  searchByQuery,
 };
