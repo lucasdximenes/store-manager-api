@@ -34,4 +34,12 @@ describe('Testing the product model', function () {
       expect(result).to.be.deep.equal(1);
     });
   });
+
+  describe('when update method is called', function () {
+    it('returns if have affectedRows', async function () {
+      sinon.stub(connection, 'execute').resolves([{ affectedRows: 1 }]);
+      const result = await productsModel.update(1, 'Product 1');
+      expect(result).to.be.deep.equal(true);
+    });
+  });
 });

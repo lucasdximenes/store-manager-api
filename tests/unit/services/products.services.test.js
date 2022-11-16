@@ -44,4 +44,21 @@ describe('Testing the product service', function () {
       expect(result).to.be.deep.equal(productList[0]);
     });
   });
+
+  describe('whe update method is called', function () {
+    it('should successfully if id is valid', async function () {
+      sinon.stub(productsModel, 'update').resolves(true);
+      sinon.stub(productsModel, 'getById').resolves([productList[0]]);
+      const result = await productsServices.update(1, 'Product 1');
+      expect(result).to.be.deep.equal(productList[0]);
+    });
+
+    it('should return an error if id is not found', async function () {
+      sinon.stub(productsModel, 'update').resolves(false);
+      const result = await productsServices.update(1, 'Product 1');
+      expect(result).to.have.property('isError', true);
+      expect(result).to.have.nested.property('statusCode', 404);
+      expect(result).to.have.nested.property('message', 'Product not found');
+    });
+  });
 });
