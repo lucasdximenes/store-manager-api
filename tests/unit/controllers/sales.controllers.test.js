@@ -105,4 +105,40 @@ describe('Testing the sales controller', function () {
       });
     });
   });
+
+  describe('When exclude method is called', function () {
+    it('should return 204 if sale successfully deleted', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(salesServices, 'remove').resolves({ isError: false });
+
+      await salesControllers.exclude(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+      expect(res.json).to.have.been.calledWith();
+    });
+
+    it('should return an error if sale not found', async function () {
+      const res = {};
+      const req = {
+        params: { id: 1 },
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(salesServices, 'remove').resolves(saleNotFoundError);
+
+      await salesControllers.exclude(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({
+        message: 'Sale not found',
+      });
+    });
+  });
 });

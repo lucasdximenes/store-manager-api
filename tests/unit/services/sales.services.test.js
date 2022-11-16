@@ -63,4 +63,22 @@ describe('Testing the sales services', function () {
       expect(result).to.have.nested.property('message', 'Sale not found');
     });
   });
+
+  describe('When remove method is called', function () {
+    it('return object without error if sale is removed', async function () {
+      sinon.stub(salesModel, 'existSale').resolves([{ id: 1 }]);
+      sinon.stub(salesModel, 'remove').resolves();
+      sinon.stub(salesProductsModel, 'remove').resolves();
+      const result = await salesServices.remove(1);
+      expect(result).to.be.deep.equal({ isError: false });
+    });
+
+    it('return an error if sale is not found', async function () {
+      sinon.stub(salesModel, 'existSale').resolves([]);
+      const result = await salesServices.remove(1);
+      expect(result).to.have.property('isError', true);
+      expect(result).to.have.nested.property('statusCode', 404);
+      expect(result).to.have.nested.property('message', 'Sale not found');
+    });
+  });
 });

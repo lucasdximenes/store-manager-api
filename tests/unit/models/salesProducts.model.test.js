@@ -17,4 +17,15 @@ describe('Testing the salesProducts model', function () {
       expect(result).to.be.equal(true);
     });
   });
+
+  describe('When remove method is called', function () {
+    it('remove is successful', async function () {
+      sinon.stub(connection, 'execute').resolves();
+      await salesProductsModel.remove(1);
+      expect(connection.execute).to.have.been.calledWith(
+        'DELETE FROM StoreManager.sales_products WHERE sale_id = ?',
+        [1],
+      );
+    });
+  });
 });
