@@ -7,12 +7,12 @@ info:
   contact:
     name: Lucas Ximenes
     email: lucasdximenes@gmail.com
-    url: github.com/lucasximenes
+    url: https://github.com/lucasdximenes
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
 servers:
-  - url: http://localhost:3000/
+  - url: http://localhost:3000
     description: Local server
 tags:
   - name: products
